@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang='sv' dir="ltr">
+    <head>
+      <meta charset="utf-8">
+      <title>GÖteborgaren Bera</title>
+      <link rel="stylesheet" href="style.css">
+      <script src="script.js" charset="utf-8"></script>
+    </head>
+    <body>
+       <main>
+           <header>
+               <h1>Göteborgaren Bera Boats</h1>
+           </header>
+
+          <div>
+              <button id="showBoatsButton">All the boats</button>
+              <input type="text" id="searchModel" placeholder="Search model you want..."/>
+              <div id="boatList">
+
+              </div>
+          </div>
+
+           <div id="inputElement">
+             <h2>Add new boats here:</h2>
+               <input type="text" id="inputName" placeholder="Name of model..."/>
+               <div id="#motorDiv">
+                   <p class="motorQuestion">Does it have a motor?</p>
+                   <label><input type="radio" name ="motor" class="motor" value="Yes" checked>Yes</label>
+                   <label><input type="radio" name="motor"class="motor" value="No">No</label>
+               </div>
+
+               <input type="number" id="inputPrice" placeholder="Price..."/><br/>
+               <input type="number" id="inputYear" placeholder="Year of production..."/>
+               <div id="#sailboatDiv">
+                   <p class="sailboatQuestion">Is it a sailboat?</p>
+                   <label><input type="radio" name ="sailboat" class="sailboat" value="Yes" checked>Yes</label>
+                   <label><input type="radio" name="sailboat"class="sailboat" value="No">No</label>
+               </div>
+
+               <button id="addButton">Add</button>
+           </div>
+       </main>
+    </body>
+</html>
