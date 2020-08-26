@@ -50,10 +50,12 @@ app.delete('/api/boatdelete', (req,res)=>{
 
 app.get('/api/search' , (req,res)=>{
   let searchedItem = req.query.word;
+  if(!searchedItem){res.send(data);}
   let filtered = data.filter(boat=>boat.modelname.toLowerCase().includes((searchedItem).toLowerCase()));
-// res.send( `The searched word is:${searchedItem}`);
-let filteredDataToSend = JSON.stringify(filtered);
-  res.send(`Filtered List is: ${filteredDataToSend}`);
+  let filteredDataToSend = JSON.stringify(filtered);
+  res.send(filteredDataToSend);
+
+
 })
 
 
