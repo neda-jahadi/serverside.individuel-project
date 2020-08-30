@@ -21,7 +21,7 @@ window.addEventListener('load', async ()=>{
      boatObject = await response.json();
      console.log('Fetch boatList:',boatObject );
      boatObject.forEach( boat => {
-       createboats(boat.modelname,boat.motor,boat.price,boat.production,boat.sailboat);
+       createboats(boat.modelname,boat.motor,boat.price,boat.production,boat.sailboat, boat._id);
         // let boatItem = document.createElement('div');
         // boatItem.innerHTML = `modelname:${boat.modelname}` + "<br />" + `motor:${boat.motor}` +
         //  "<br />" + `price:${boat.price}` + "<br />" + `productionyear:${boat.production}`+  "<br />" +
@@ -41,13 +41,13 @@ window.addEventListener('load', async ()=>{
      });//boatObject.forEach
 
      searchModel.addEventListener('input', async (event) =>{
-         boatList.innerHTML= '';
-         const searchResponse = await fetch(`/api/search?word=${event.target.value}` , {method:'GET'});
+       boatList.innerHTML= '';
+         const searchResponse = await fetch(`/api/searchboat?word=${event.target.value}` , {method:'GET'});
          let filteredBoats = await searchResponse.json();
          console.log('filtered boats are:', filteredBoats);
          boatObject = filteredBoats;
          boatObject.forEach( boat => {
-           createboats(boat.modelname,boat.motor,boat.price,boat.production,boat.sailboat);
+           createboats(boat.modelname,boat.motor,boat.price,boat.production,boat.sailboat,boat._id);
          });
 
      })
@@ -86,9 +86,9 @@ window.addEventListener('load', async ()=>{
             },
         body: JSON.stringify(newItem)
           })
-       const text = await response.text();
-       console.log('Response is:', text);
-        createboats(modelname,motor,price,production,sailboat)
+       const id = await response.text();
+       console.log(id);
+        createboats(modelname,motor,price,production,sailboat,id)
        // let boatItem = document.createElement('div');
        // let deleteButton = document.createElement('button');
        // deleteButton.innerText = 'Delete!';
@@ -109,7 +109,7 @@ window.addEventListener('load', async ()=>{
   })//addButton
 
 
-  function createboats(modelname,motor,price,production,sailboat) {
+  function createboats(modelname,motor,price,production,sailboat,id) {
     let boatItem = document.createElement('div');
     let deleteButton = document.createElement('button');
     deleteButton.innerText = 'Delete!';
@@ -121,7 +121,7 @@ window.addEventListener('load', async ()=>{
      boatList.appendChild(boatItem);
      boatItem.appendChild(deleteButton);
      deleteButton.addEventListener('click', async ()=>{
-       const deleteResponse = await fetch(`/api/boatdelete?modelname=${modelname}`,{method: 'DELETE'});
+        const deleteResponse = await fetch(`/api/boatdelete?id=${id}`,{method: 'DELETE'});
         const deleteResult = await deleteResponse.text();
         console.log('delete result:', deleteResult);
         boatList.removeChild(boatItem);

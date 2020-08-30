@@ -5,10 +5,14 @@ const app = express();
 
 const port = 2294;
 
+const {getAllBoats,getBoat,insertBoat,deletedBoat} = require('./database.js');
+
 let logger = (req,res,next) =>{
     console.log(`LOGGER: ${req.method} ${req.url}`);
     next();
 }
+
+
 app.use(logger);
 
 app.use(express.static(__dirname + '/frontend'));
@@ -27,25 +31,37 @@ let data = [
 ]
 
 app.get('/api/boats', (req,res)=>{
-    res.send(data);
+    getAllBoats(dataOrError =>{
+      res.send(dataOrError)
+    })
 })
 
 app.get('/api/boat', (req,res)=>{
-  let model= req.query.modelname;
-  let searchResult = data.filter(boat=>boat.modelname===model);
-  res.send(searchResult);
+
+  getBoat(req.query.id, dataOrError => {
+    res.send(dataOrError)
+  } )
+  // let searchResult = data.filter(boat=>boat.modelname===model);
+  // res.send(searchResult);
 })
 
 app.post('/api/boat', (req,res)=>{
   let newBoat = {modelname:req.body.modelname, production:req.body.production, price:req.body.price, sailboat:req.body.sailboat, motor:req.body.motor};
-  data.push(newBoat);
-  res.send('New boat added');
+
+  insertBoat(newBoat, dataOrError => {
+    res.send(dataOrError)
+  })
+  // data.push(newBoat);
+  // res.send('New boat added');
 })
 
 app.delete('/api/boatdelete', (req,res)=>{
-    let deletedBoat = req.query.modelname;
-    data = data.filter(boat=>boat.modelname!==deletedBoat);
-    res.send(`${deletedBoat} is deleted`);
+    console.log(req.query.id);
+    deletedBoat(req.query.id, dataOrError => {
+      res.send(dataOrError)
+    })
+    // data = data.filter(boat=>boat.modelname!==deletedBoat);
+    // res.send(`${deletedBoat} is deleted`);
 })
 
 app.get('/api/search' , (req,res)=>{
