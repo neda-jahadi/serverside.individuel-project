@@ -2,7 +2,7 @@
 window.addEventListener('load', async ()=>{
     let boatList = document.querySelector('#boatList');
 
-    let showBoatsButton = document.querySelector('#showBoatsButton');
+    let sortByName = document.querySelector('#sortByName');
     let inputName = document.querySelector('#inputName');
     let inputPrice = document.querySelector('#inputPrice');
     let inputYear = document.querySelector('#inputYear');
@@ -12,43 +12,49 @@ window.addEventListener('load', async ()=>{
     let searchModel = document.querySelector('#searchModel');
     let addButton = document.querySelector("#addButton");
     let boatObject;
+    let sortedByName;
+    let filteredBoats = [];
 
-    // showBoatsButton.addEventListener('click', async ()=>{
     boatList.innerHTML = '';
+
+
      const response = await fetch('/api/boats',{
          method:'GET'
      });
      boatObject = await response.json();
      console.log('Fetch boatList:',boatObject );
+
+
+
      boatObject.forEach( boat => {
        createboats(boat.modelname,boat.motor,boat.price,boat.production,boat.sailboat, boat._id);
-        // let boatItem = document.createElement('div');
-        // boatItem.innerHTML = `modelname:${boat.modelname}` + "<br />" + `motor:${boat.motor}` +
-        //  "<br />" + `price:${boat.price}` + "<br />" + `productionyear:${boat.production}`+  "<br />" +
-        //  `sailboat:${boat.sailboat}` + "<br />";
-        //
-        //  boatList.appendChild(boatItem);
-        // let deleteButton = document.createElement('button');
-        // deleteButton.innerText = 'Delete!';
-        // boatItem.appendChild(deleteButton);
-        // deleteButton.addEventListener('click', async ()=>{
-        //   const deleteResponse = await fetch(`/api/boatdelete?modelname=${boat.modelname}`,{method: 'DELETE'});
-        //    const deleteResult = await deleteResponse.text();
-        //    console.log('delete result:', deleteResult);
-        //    boatList.removeChild(boatItem);
-        //
-        // })//deleteButton
      });//boatObject.forEach
+
+
 
      searchModel.addEventListener('input', async (event) =>{
        boatList.innerHTML= '';
          const searchResponse = await fetch(`/api/searchboat?word=${event.target.value}` , {method:'GET'});
-         let filteredBoats = await searchResponse.json();
+         filteredBoats = await searchResponse.json();
          console.log('filtered boats are:', filteredBoats);
          boatObject = filteredBoats;
          boatObject.forEach( boat => {
            createboats(boat.modelname,boat.motor,boat.price,boat.production,boat.sailboat,boat._id);
          });
+
+         sortByName.addEventListener('click', async ()=>{
+           const response = await fetch(`/api/sortbymodel?filtered=${event.target.value}`, {
+             method : 'GET'
+           })
+           boatObject = await response.json();
+           console.log('sorted by model:', boatObject);
+           boatList.innerHTML = '';
+           boatObject.forEach( boat => {
+             createboats(boat.modelname,boat.motor,boat.price,boat.production,boat.sailboat, boat._id);
+           });//boatObject.forEach
+
+         })
+
 
      })
 
@@ -61,8 +67,8 @@ window.addEventListener('load', async ()=>{
       let sailboat;
       let motorDivObtions = motorDiv.querySelectorAll("input");
       let sailboatDivObtions = sailboatDiv.querySelectorAll("input");
-      let price = inputPrice.value;
-      let production = inputYear.value;
+      let price = Number(inputPrice.value);
+      let production = Number(inputYear.value);
 
 
       for (let i=0; i<2; i++){

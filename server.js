@@ -5,7 +5,7 @@ const app = express();
 
 const port = 2294;
 
-const {getAllBoats,getBoat,insertBoat,deletedBoat} = require('./database.js');
+const {getAllBoats,getBoat,insertBoat,deletedBoat,searchBoat,sortByName} = require('./database.js');
 
 let logger = (req,res,next) =>{
     console.log(`LOGGER: ${req.method} ${req.url}`);
@@ -45,6 +45,25 @@ app.get('/api/boat', (req,res)=>{
   // res.send(searchResult);
 })
 
+app.get('/api/sortbymodel', (req,res) =>{
+  let filtered = req.query.filtered;
+  sortByName(filtered, dataOrError => {
+    res.send(dataOrError)
+  })
+})
+
+app.get('/api/searchboat' ,(req,res) => {
+  let searchedWord = req.query.word;
+  if(!searchedWord){
+    getAllBoats(dataOrError =>{
+      res.send(dataOrError)
+    })
+  }
+  searchBoat(searchedWord, dataOrError => {
+    res.send(dataOrError)
+  })
+})
+
 app.post('/api/boat', (req,res)=>{
   let newBoat = {modelname:req.body.modelname, production:req.body.production, price:req.body.price, sailboat:req.body.sailboat, motor:req.body.motor};
 
@@ -63,6 +82,8 @@ app.delete('/api/boatdelete', (req,res)=>{
     // data = data.filter(boat=>boat.modelname!==deletedBoat);
     // res.send(`${deletedBoat} is deleted`);
 })
+
+
 
 app.get('/api/search' , (req,res)=>{
   let searchedItem = req.query.word;

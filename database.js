@@ -11,9 +11,43 @@ function getBoat(id,callback) {
 get({ _id: new ObjectID(id) }, array => callback( array[0] ))
 }
 
-// function searchBoatName(word,callback) {
-//   get({modelname: word}, array => callback( array ))
-// }
+function searchBoat(word,callback) {
+
+
+  get({modelname: {"$regex": `.*${word}.*`, $options: "i"}}, array => callback( array ))
+}
+
+// {$regex: new RegExp(column), $options: "i"};
+function sortByName(filter,callback) {
+  let searched = {}
+  if(filter){
+    searched = {modelname: {"$regex": `.*${filter}.*`, $options: "i"}}
+  }
+  MongoClient.connect(
+    url,
+    {  useUnifiedTopology: true },
+    async (error,client) => {
+      if(error) {
+        callback('"ERROR!! Could not connect"');
+        return;
+      }
+      const col = client.db(dbName).collection(collectionName);
+      try {
+        const cursor = await col.find(searched).sort({price:1});
+
+        const array = await cursor.toArray();
+        console.log('cursor to array', array);
+        callback(array);
+      }catch(error) {
+        console.log('Querry error:', error.message);
+        callback('"ERROR!! Query error"');
+
+      } finally {
+        client.close();
+      }
+    }
+  )
+}
 
 function deletedBoat(id, callback) {
 
@@ -202,7 +236,7 @@ function deleteItem(filter,callback) {
 //   )
 // }
 
-module.exports = {getAllBoats,getBoat, insertBoat, deletedBoat}
+module.exports = {getAllBoats,getBoat, insertBoat, deletedBoat, searchBoat, sortByName}
 
 
 // Response is: {
