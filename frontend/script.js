@@ -1,5 +1,5 @@
-  // let boatList = document.querySelector('#boatList');
-window.addEventListener('load', async ()=>{
+ // let boatList = document.querySelector('#boatList');
+ window.addEventListener('load', async ()=>{
     let boatList = document.querySelector('#boatList');
 
     let sortByName = document.querySelector('#sortByName');
