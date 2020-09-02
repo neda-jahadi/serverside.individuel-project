@@ -5,7 +5,7 @@ const app = express();
 
 const port = 2294;
 
-const {getAllBoats,getBoat,insertBoat,deletedBoat,searchBoat,sortByName} = require('./database.js');
+const {getAllBoats,getBoat,insertBoat,deletedBoat,searchBoat} = require('./database.js');
 
 let logger = (req,res,next) =>{
     console.log(`LOGGER: ${req.method} ${req.url}`);
@@ -52,14 +52,25 @@ app.get('/api/sortbymodel', (req,res) =>{
   })
 })
 
-app.get('/api/searchboat' ,(req,res) => {
+app.get('/api/search/' ,(req,res) => {
   let searchedWord = req.query.word;
-  if(!searchedWord){
-    getAllBoats(dataOrError =>{
-      res.send(dataOrError)
-    })
-  }
-  searchBoat(searchedWord, dataOrError => {
+  let searchedMaxPrice = Number(req.query.maxprice);
+  let searchedIsSailBoat = req.query.is_sail;
+  let searchedHasMotor = req.query.has_motor;
+  let searchedYearBefore = Number(req.query.madebefore);
+  let searchedYearAfter = Number(req.query.madeafter);
+  let keySort = req.query.order;
+  console.log(searchedWord);
+  console.log(typeof(searchedMaxPrice));
+  console.log(searchedIsSailBoat);
+  console.log('order is:', req.query.order);
+
+//   if(!searchedWord && !searchedMaxPrice ){
+//     getAllBoats(dataOrError =>{
+//       res.send(dataOrError)
+//     })
+//   }
+  searchBoat(searchedWord, searchedMaxPrice, searchedIsSailBoat, searchedHasMotor, searchedYearBefore, searchedYearAfter, keySort, dataOrError => {
     res.send(dataOrError)
   })
 })
@@ -81,18 +92,6 @@ app.delete('/api/boatdelete', (req,res)=>{
     })
     // data = data.filter(boat=>boat.modelname!==deletedBoat);
     // res.send(`${deletedBoat} is deleted`);
-})
-
-
-
-app.get('/api/search' , (req,res)=>{
-  let searchedItem = req.query.word;
-  if(!searchedItem){res.send(data);}
-  let filtered = data.filter(boat=>boat.modelname.toLowerCase().includes((searchedItem).toLowerCase()));
-  let filteredDataToSend = JSON.stringify(filtered);
-  res.send(filteredDataToSend);
-
-
 })
 
 

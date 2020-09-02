@@ -11,17 +11,22 @@ function getBoat(id,callback) {
 get({ _id: new ObjectID(id) }, array => callback( array[0] ))
 }
 
-function searchBoat(word,callback) {
+function searchBoat(filterword, filterprice, filterSailBoat, filterHasMotor, filterMadeBefore, filterMadeAfter, keySort, callback) {
 
-
-  get({modelname: {"$regex": `.*${word}.*`, $options: "i"}}, array => callback( array ))
+if(!filterword) {
+    console.log('filterword is:', filterword);
+    sortAndSearch({ price: {$lt: filterprice}, sailboat: filterSailBoat, motor: filterHasMotor, production: {$lt: filterMadeBefore}, production: {$gte: filterMadeAfter}}, keySort, array => callback( array ))
+}else{
+    sortAndSearch({modelname: {"$regex": `.*${filterword}.*`, $options: "i"}, price: {$lt: filterprice}, sailboat: filterSailBoat, motor: filterHasMotor, production: {$lt: filterMadeBefore}, production: {$gte: filterMadeAfter}}, keySort, array => callback( array ))
+}
+  
 }
 
-// {$regex: new RegExp(column), $options: "i"};
-function sortByName(filter,callback) {
-  let searched = {}
-  if(filter){
-    searched = {modelname: {"$regex": `.*${filter}.*`, $options: "i"}}
+
+function sortAndSearch(filter, sortkey,callback) {
+  let sortItem = {};
+  if(sortkey==='lowerprice'){
+      sortItem = {price:-1}
   }
   MongoClient.connect(
     url,
@@ -33,7 +38,7 @@ function sortByName(filter,callback) {
       }
       const col = client.db(dbName).collection(collectionName);
       try {
-        const cursor = await col.find(searched).sort({price:1});
+        const cursor = await col.find(filter).sort(sortItem);
 
         const array = await cursor.toArray();
         console.log('cursor to array', array);
@@ -81,6 +86,7 @@ function insertBoat(newBoat, callback) {
 }
 
 function get(filter, callback) {
+    
   MongoClient.connect(
     url,
     {  useUnifiedTopology: true },
@@ -91,7 +97,11 @@ function get(filter, callback) {
       }
       const col = client.db(dbName).collection(collectionName);
       try {
-        const cursor = await col.find(filter);
+          console.log('type of filter is:', typeof(filter));
+        
+            const cursor = await col.find(filter)
+        
+        
 
         const array = await cursor.toArray();
         console.log('cursor to array', array);
@@ -236,7 +246,7 @@ function deleteItem(filter,callback) {
 //   )
 // }
 
-module.exports = {getAllBoats,getBoat, insertBoat, deletedBoat, searchBoat, sortByName}
+module.exports = {getAllBoats,getBoat, insertBoat, deletedBoat, searchBoat}
 
 
 // Response is: {
@@ -261,3 +271,4 @@ module.exports = {getAllBoats,getBoat, insertBoat, deletedBoat, searchBoat, sort
 //   "n":1,
 //   "ok":1
 // }
+

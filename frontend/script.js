@@ -2,22 +2,40 @@
  window.addEventListener('load', async ()=>{
     let boatList = document.querySelector('#boatList');
 
-    let sortByName = document.querySelector('#sortByName');
+    let sortNameAscending = document.querySelector('#sortNameAscending');
+    let sortNameDescending = document.querySelector('#sortNameDescending');
     let inputName = document.querySelector('#inputName');
     let inputPrice = document.querySelector('#inputPrice');
     let inputYear = document.querySelector('#inputYear');
     let inputSailboat = document.querySelector('#inputSailboat');
     let motorDiv = document.getElementById('#motorDiv');
     let sailboatDiv = document.getElementById('#sailboatDiv');
+   
+  
+    
+
     let searchModel = document.querySelector('#searchModel');
+    let searchMaxPrice = document.querySelector('#searchMaxPrice');
+    let sailboatChoiceSearch = document.querySelector('#sailboatSearch');
+    let hasMotorChoiceSearch = document.querySelector('#hasMotorSearch');
+    let maxProductionYear= document.querySelector('#madebeforeSearch');
+    let minProductionYear= document.querySelector('#madeafterSearch');
+    
+
+    let searchButton = document.querySelector("#search");
+     
+    
+
     let addButton = document.querySelector("#addButton");
     let boatObject;
     let sortedByName;
     let filteredBoats = [];
+    let modelInputValue = '';
+    let maxPriceInputValue;
 
     boatList.innerHTML = '';
 
-
+     
      const response = await fetch('/api/boats',{
          method:'GET'
      });
@@ -32,9 +50,19 @@
 
 
 
-     searchModel.addEventListener('input', async (event) =>{
-       boatList.innerHTML= '';
-         const searchResponse = await fetch(`/api/searchboat?word=${event.target.value}` , {method:'GET'});
+     searchModel.addEventListener('input', (event) =>{
+        
+         modelInputValue = event.target.value;
+     })
+
+     searchMaxPrice.addEventListener('input', (event) => {
+         maxPriceInputValue = event.target.value;
+         
+     })
+
+     searchButton.addEventListener('click', async () => {
+          boatList.innerHTML= '';
+        const searchResponse = await fetch(`/api/search/?word=${modelInputValue}&maxprice=${maxPriceInputValue}&is_sail=${sailboatChoiceSearch.value}&has_motor=${hasMotorChoiceSearch.value}&madebefore=${maxProductionYear.value}&madeafter=${minProductionYear.value}&order=lowerprice` , {method:'GET'});
          filteredBoats = await searchResponse.json();
          console.log('filtered boats are:', filteredBoats);
          boatObject = filteredBoats;
@@ -42,21 +70,24 @@
            createboats(boat.modelname,boat.motor,boat.price,boat.production,boat.sailboat,boat._id);
          });
 
-         sortByName.addEventListener('click', async ()=>{
-           const response = await fetch(`/api/sortbymodel?filtered=${event.target.value}`, {
-             method : 'GET'
-           })
-           boatObject = await response.json();
-           console.log('sorted by model:', boatObject);
-           boatList.innerHTML = '';
-           boatObject.forEach( boat => {
-             createboats(boat.modelname,boat.motor,boat.price,boat.production,boat.sailboat, boat._id);
-           });//boatObject.forEach
 
-         })
+     } )
+         
+    
 
+     sortNameAscending.addEventListener('click', async ()=>{
+        const response = await fetch(`/api/sortbymodel?filtered=${searchInputValue}`, {
+          method : 'GET'
+        })
+        boatObject = await response.json();
+        console.log('sorted by model:', boatObject);
+        boatList.innerHTML = '';
+        boatObject.forEach( boat => {
+          createboats(boat.modelname,boat.motor,boat.price,boat.production,boat.sailboat, boat._id);
+        });//boatObject.forEach
 
-     })
+      })
+
 
 
 
@@ -119,7 +150,6 @@
     let boatItem = document.createElement('div');
     let deleteButton = document.createElement('button');
     deleteButton.innerText = 'Delete!';
-    // boatItem.innerHTML = `modelname:${modelname}, motor:${motor}, price:${price}, productionyear:${production}, sailboat:${sailboat}`
     boatItem.innerHTML = `modelname:${modelname}` + "<br />" + `motor:${motor}` +
      "<br />" + `price:${price}` + "<br />" + `productionyear:${production}`+  "<br />" +
      `sailboat:${sailboat}` + "<br />";

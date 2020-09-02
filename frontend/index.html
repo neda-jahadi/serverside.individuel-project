@@ -13,8 +13,31 @@
            </header>
 
           <div>
-              <button id="sortByName">Sort by model name</button>
-              <input type="text" id="searchModel" placeholder="Search model you want..."/>
+              <input type="text" id="searchModel" placeholder="Model you want..."/><br/>
+              <input type="number" id="searchMaxPrice" placeholder="Max price..."/><br/>
+              <label for="sailboatSearch">Sailboat?</label>
+              <select name= "sailboatSearch" id="sailboatSearch">
+                <option value = "yes"> Yes </option>
+                    <option value = "no"> No </option>
+                
+              </select>
+              <label for="hasMotorSearch">Has motor?</label>
+              <select name= "hasMotorSearch" id="hasMotorSearch">
+                <option value = "yes"> Yes </option>
+                    <option value = "no"> No </option>
+                
+              </select><br/>
+              <label for="madebeforeSearch">Production year before:</label>
+              <input type="number" min="1900" max="2099" step="1" value="2020" id="madebeforeSearch" /><br/>
+              
+              <label for="madeafterSearch">Production year after:</label>
+              <input type="number" min="1900" max="2099" step="1" value="2000" id="madeafterSearch" /><br/>
+
+              <button id="search">Search!</button> 
+
+              <button id="sortNameAscending">Sort by model name(A...Z)</button>
+              <button id="sortNameDescending">Sort by model name(Z...A)</button>
+              
               <div id="boatList">
 
               </div>
@@ -25,16 +48,16 @@
                <input type="text" id="inputName" placeholder="Name of model..."/>
                <div id="#motorDiv">
                    <p class="motorQuestion">Does it have a motor?</p>
-                   <label><input type="radio" name ="motor" class="motor" value="Yes" checked>Yes</label>
-                   <label><input type="radio" name="motor"class="motor" value="No">No</label>
+                   <label><input type="radio" name ="motor" class="motor" value="yes" checked>Yes</label>
+                   <label><input type="radio" name="motor"class="motor" value="no">No</label>
                </div>
 
                <input type="number" id="inputPrice" placeholder="Price..."/><br/>
                <input type="number" id="inputYear" placeholder="Year of production..."/>
                <div id="#sailboatDiv">
                    <p class="sailboatQuestion">Is it a sailboat?</p>
-                   <label><input type="radio" name ="sailboat" class="sailboat" value="Yes" checked>Yes</label>
-                   <label><input type="radio" name="sailboat"class="sailboat" value="No">No</label>
+                   <label><input type="radio" name ="sailboat" class="sailboat" value="yes" checked>Yes</label>
+                   <label><input type="radio" name="sailboat"class="sailboat" value="no">No</label>
                </div>
 
                <button id="addButton">Add</button>
