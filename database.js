@@ -12,22 +12,74 @@ get({ _id: new ObjectID(id) }, array => callback( array[0] ))
 }
 
 function searchBoat(filterword, filterprice, filterSailBoat, filterHasMotor, filterMadeBefore, filterMadeAfter, keySort, callback) {
+    
+    let sortFilter = {}
+    if((keySort === 'name_asc') || (keySort === 'name_desc')) {
+        if(keySort === 'name_asc') {
+             sortFilter = {modelname: 1}
+            }else{
+                sortFilter = {modelname: -1}
+            }
+            console.log('sort filter is: ', sortFilter);
+        sortAlphabetical({modelname: {"$regex": `.*${filterword}.*`, $options: "i"}, price: {$lt: filterprice}, sailboat: filterSailBoat, motor: filterHasMotor, production: {$lt: filterMadeBefore}, production: {$gte: filterMadeAfter}}, sortFilter , array => callback( array ))
+    
+    }else{
 
-if(!filterword) {
-    console.log('filterword is:', filterword);
-    sortAndSearch({ price: {$lt: filterprice}, sailboat: filterSailBoat, motor: filterHasMotor, production: {$lt: filterMadeBefore}, production: {$gte: filterMadeAfter}}, keySort, array => callback( array ))
-}else{
-    sortAndSearch({modelname: {"$regex": `.*${filterword}.*`, $options: "i"}, price: {$lt: filterprice}, sailboat: filterSailBoat, motor: filterHasMotor, production: {$lt: filterMadeBefore}, production: {$gte: filterMadeAfter}}, keySort, array => callback( array ))
+            if(keySort === 'lowprice'){
+                sortFilter = {price: 1}
+                console.log('sort filter is:', sortFilter);
+        }else if(keySort === 'oldest') {
+            sortFilter = {production: 1}
+            console.log('sort filter is:', sortFilter);
+        }else {
+            sortFilter = {production: -1}
+        }
+        console.log('sort filter is: ', sortFilter);
+        sortAndSearch({modelname: {"$regex": `.*${filterword}.*`, $options: "i"}, price: {$lt: filterprice}, sailboat: filterSailBoat, motor: filterHasMotor, production: {$lt: filterMadeBefore}, production: {$gte: filterMadeAfter}}, sortFilter, array => callback( array ))
+   
+    }
+// if(!filterword) {
+//     console.log('filterword is:', filterword);
+//     sortAndSearch({ price: {$lt: filterprice}, sailboat: filterSailBoat, motor: filterHasMotor, production: {$lt: filterMadeBefore}, production: {$gte: filterMadeAfter}}, keySort, array => callback( array ))
+// }else{
+    
 }
+
+
+function sortAlphabetical(filter, sortfilter, callback){
+    
+    console.log('start to sort and search with sortAlphabetical...');
+    MongoClient.connect(
+      url,
+      {  useUnifiedTopology: true },
+      async (error,client) => {
+        if(error) {
+          callback('"ERROR!! Could not connect"');
+          return;
+        }
+        const col = client.db(dbName).collection(collectionName);
+        try {
+          const cursor =  await col.find(filter).collation({'locale':'en'}).sort(sortfilter);
+          
+          const array = await cursor.toArray();
+          // console.log('cursor to array', array);
+          callback(array);
+        }catch(error) {
+          console.log('Querry error:', error.message);
+          callback('"ERROR!! Query error"');
   
+        } finally {
+          client.close();
+        }
+      }
+    )
+
+    
 }
 
-
-function sortAndSearch(filter, sortkey,callback) {
-  let sortItem = {};
-  if(sortkey==='lowerprice'){
-      sortItem = {price:-1}
-  }
+function sortAndSearch(filter, sortfilter,callback) {
+    
+   console.log('start to sort and search with sortAndSearch...');
   MongoClient.connect(
     url,
     {  useUnifiedTopology: true },
@@ -38,10 +90,10 @@ function sortAndSearch(filter, sortkey,callback) {
       }
       const col = client.db(dbName).collection(collectionName);
       try {
-        const cursor = await col.find(filter).sort(sortItem);
-
+        
+        const cursor = await col.find(filter).sort(sortfilter);
         const array = await cursor.toArray();
-        console.log('cursor to array', array);
+        // console.log('cursor to array', array);
         callback(array);
       }catch(error) {
         console.log('Querry error:', error.message);
