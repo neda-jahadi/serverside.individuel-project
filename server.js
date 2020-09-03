@@ -3,7 +3,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 
-const port = 2294;
+
+const port = process.env.PORT || 2294;
 
 const {getAllBoats,getBoat,insertBoat,deletedBoat,searchBoat} = require('./database.js');
 
