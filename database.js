@@ -38,10 +38,7 @@ function searchBoat(filterword, filterprice, filterSailBoat, filterHasMotor, fil
         sortAndSearch({modelname: {"$regex": `.*${filterword}.*`, $options: "i"}, price: {$lt: filterprice}, sailboat: filterSailBoat, motor: filterHasMotor, production: {$lt: filterMadeBefore}, production: {$gte: filterMadeAfter}}, sortFilter, array => callback( array ))
    
     }
-// if(!filterword) {
-//     console.log('filterword is:', filterword);
-//     sortAndSearch({ price: {$lt: filterprice}, sailboat: filterSailBoat, motor: filterHasMotor, production: {$lt: filterMadeBefore}, production: {$gte: filterMadeAfter}}, keySort, array => callback( array ))
-// }else{
+
     
 }
 
@@ -193,6 +190,9 @@ function deleteItem(filter,callback) {
     }
   )
 }
+
+module.exports = {getAllBoats,getBoat, insertBoat, deletedBoat, searchBoat}
+
 // console.log('About to connect to database...');
 // function runQuery(queryFunction, callback) {
 //   MongoClient.connect(url, { useUnifiedTopology: true },
@@ -298,7 +298,6 @@ function deleteItem(filter,callback) {
 //   )
 // }
 
-module.exports = {getAllBoats,getBoat, insertBoat, deletedBoat, searchBoat}
 
 
 // Response is: {

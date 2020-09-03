@@ -41,8 +41,7 @@ app.get('/api/boat', (req,res)=>{
   getBoat(req.query.id, dataOrError => {
     res.send(dataOrError)
   } )
-  // let searchResult = data.filter(boat=>boat.modelname===model);
-  // res.send(searchResult);
+ 
 })
 
 app.get('/api/sortbymodel', (req,res) =>{
@@ -65,11 +64,7 @@ app.get('/api/search/' ,(req,res) => {
   console.log(searchedIsSailBoat);
   console.log('order is:', req.query.order);
 
-//   if(!searchedWord && !searchedMaxPrice ){
-//     getAllBoats(dataOrError =>{
-//       res.send(dataOrError)
-//     })
-//   }
+
   searchBoat(searchedWord, searchedMaxPrice, searchedIsSailBoat, searchedHasMotor, searchedYearBefore, searchedYearAfter, keySort, dataOrError => {
     res.send(dataOrError)
   })

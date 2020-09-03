@@ -12,36 +12,44 @@
                <h1>Göteborgaren Bera Boats</h1>
            </header>
 
-          <div>
-              <input type="text" id="searchModel" placeholder="Model you want..."/><br/>
-              <input type="number" id="searchMaxPrice" placeholder="Max price..."/><br/>
-              <label for="sailboatSearch">Sailboat?</label>
-              <select name= "sailboatSearch" id="sailboatSearch">
-                <option value = "yes"> Yes </option>
-                    <option value = "no"> No </option>
-                
-              </select>
-              <label for="hasMotorSearch">Has motor?</label>
-              <select name= "hasMotorSearch" id="hasMotorSearch">
-                <option value = "yes"> Yes </option>
-                    <option value = "no"> No </option>
-                
-              </select><br/>
-              <label for="madebeforeSearch">Production year before:</label>
-              <input type="number" min="1900" max="2099" step="1" value="2020" id="madebeforeSearch" /><br/>
-              
-              <label for="madeafterSearch">Production year after:</label>
-              <input type="number" min="1900" max="2099" step="1" value="2000" id="madeafterSearch" /><br/>
+          <div class="form">
+            
+                    <h2>Find your boat here...</h2>
+                    <input type="text" id="searchModel" placeholder="Model name..."/><br/>
+                    <input type="number" id="searchMaxPrice" placeholder="Max price..."/><br/>
+                    
+                    <label for="sailboatSearch">Is it a Sailboat?</label>
+                    <select name= "sailboatSearch" id="sailboatSearch">
+                        <option value = "yes"> Yes </option>
+                            <option value = "no"> No </option>
+                        
+                    </select>
+                    <label for="hasMotorSearch">Does it have motor?</label>
+                    <select name= "hasMotorSearch" id="hasMotorSearch">
+                        <option value = "yes"> Yes </option>
+                            <option value = "no"> No </option>
+                        
+                    </select><br/>
+                    <label for="madebeforeSearch">Production year before:</label>
+                    <input type="number" min="1900" max="2099" step="1" value="2020" id="madebeforeSearch" /><br/>
+                    
+                    <label for="madeafterSearch">Production year after:</label>
+                    <input type="number" min="1900" max="2099" step="1" value="2000" id="madeafterSearch" /><br/>
+                   
+                    <h3>Sort by...</h3>
+                  
+                        <button id="sortNameAscending">Model name(A...Z)</button>
+                        <button id="sortNameDescending">Model name(Z...A)</button>
+                        <button id="sortPrice">Price(lowest ... highest)</button>
+                        <button id="sortOldToYoung">Production year(oldest ... newest)</button>
+                        <button id="sortYoungToOld">Production year(newest ... oldest)</button>
+                        <br/>
+                   
+                    
+                    <button id="search">Click to find it!</button>
 
-               
-              <p>Choose your sorting option...</p>
-              <button id="sortNameAscending">Sort model name(A...Z)</button>
-              <button id="sortNameDescending">Sort model name(Z...A)</button>
-              <button id="sortPrice">Sort price(lowest ... highest)</button>
-              <button id="sortOldToYoung">Sort production year(oldest ... newest)</button>
-              <button id="sortYoungToOld">Sort production year(newest ... oldest)</button>
-              <br/>
-              <button id="search">Search!</button>
+             
+              
               
               <div id="boatList">
 
@@ -57,7 +65,7 @@
                    <label><input type="radio" name="motor"class="motor" value="no">No</label>
                </div>
 
-               <input type="number" id="inputPrice" placeholder="Price..."/><br/>
+               <input type="number" id="inputPrice" placeholder="Price..."/><br/><br/>
                <input type="number" id="inputYear" placeholder="Year of production..."/>
                <div id="#sailboatDiv">
                    <p class="sailboatQuestion">Is it a sailboat?</p>

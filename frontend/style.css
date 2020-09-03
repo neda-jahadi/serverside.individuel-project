@@ -14,4 +14,47 @@ h1 {
 #boatList {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
+  padding: 1em;
+}
+
+.eachBoatStyle {
+   border: 2px solid darkblue;
+   padding: 0.2em;
+   margin: 0.2em;
+}
+
+.form {
+  border: 1px solid lightblue;
+  background-color: lightblue;
+  padding: 0.5em;
+  margin: 0.2em;
+  border-radius: 0.2em;
+}
+.form > * {
+  margin: 0.2em;
+}
+
+#sailboatSearch {
+  margin-right: 2em;
+}
+
+.sort-form {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+#search {
+  width: 100%;
+  background-color: darkblue;
+  color: lightblue;
+  padding: 0.5em;
+}
+
+#inputElement {
+  border: 1px solid pink;
+  background-color: peachpuff;
+  padding: 0.5em;
+  margin: 0.2em;
+  border-radius: 0.2em;
 }

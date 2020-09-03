@@ -1,4 +1,4 @@
- // let boatList = document.querySelector('#boatList');
+
  window.addEventListener('load', async ()=>{
     let boatList = document.querySelector('#boatList');
 
@@ -85,17 +85,22 @@
       sortPrice.addEventListener('click', () => {
          sortOrder ='lowprice'
       })
-      
+
      searchButton.addEventListener('click', async () => {
           boatList.innerHTML= '';
         const searchResponse = await fetch(`/api/search/?word=${modelInputValue}&maxprice=${maxPriceInputValue}&is_sail=${sailboatChoiceSearch.value}&has_motor=${hasMotorChoiceSearch.value}&madebefore=${maxProductionYear.value}&madeafter=${minProductionYear.value}&order=${sortOrder}` , {method:'GET'});
          filteredBoats = await searchResponse.json();
          console.log('filtered boats are:', filteredBoats);
          boatObject = filteredBoats;
+         if (filteredBoats.length === 0){
+            let noResultMessage = document.createElement('p');
+            noResultMessage.innerText = 'No boat is matching your search...';
+            boatList.appendChild(noResultMessage);
+         }else{
          boatObject.forEach( boat => {
            createboats(boat.modelname,boat.motor,boat.price,boat.production,boat.sailboat,boat._id);
          });
-
+         }
 
      } )
          
@@ -141,28 +146,13 @@
        const id = await response.text();
        console.log(id);
         createboats(modelname,motor,price,production,sailboat,id)
-       // let boatItem = document.createElement('div');
-       // let deleteButton = document.createElement('button');
-       // deleteButton.innerText = 'Delete!';
-       // // boatItem.innerHTML = `modelname:${modelname}, motor:${motor}, price:${price}, productionyear:${production}, sailboat:${sailboat}`
-       // boatItem.innerHTML = `modelname:${modelname}` + "<br />" + `motor:${motor}` +
-       //  "<br />" + `price:${price}` + "<br />" + `productionyear:${production}`+  "<br />" +
-       //  `sailboat:${sailboat}` + "<br />";
-       //
-       //  boatList.appendChild(boatItem);
-       //  boatItem.appendChild(deleteButton);
-       //  deleteButton.addEventListener('click', async ()=>{
-       //    const deleteResponse = await fetch(`/api/boatdelete?modelname=${modelname}`,{method: 'DELETE'});
-       //     const deleteResult = await deleteResponse.text();
-       //     console.log('delete result:', deleteResult);
-       //     boatList.removeChild(boatItem);
-       //
-       //  }) //deleteButton
-  })//addButton
+       
+  })
 
 
   function createboats(modelname,motor,price,production,sailboat,id) {
     let boatItem = document.createElement('div');
+    boatItem.classList.add("eachBoatStyle");
     let deleteButton = document.createElement('button');
     deleteButton.innerText = 'Delete!';
     boatItem.innerHTML = `modelname:${modelname}` + "<br />" + `motor:${motor}` +
