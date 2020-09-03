@@ -136,15 +136,19 @@ function insertBoat(newBoat, callback) {
 }
 
 function get(filter, callback) {
-    
+    console.log('1');
   MongoClient.connect(
     url,
     {  useUnifiedTopology: true },
     async (error,client) => {
+      console.log('2');
       if(error) {
+        console.log('error', error.message);
+
         callback('"ERROR!! Could not connect"');
         return;
       }
+      console.log('3');
       const col = client.db(dbName).collection(collectionName);
       try {
           console.log('type of filter is:', typeof(filter));

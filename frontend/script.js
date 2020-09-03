@@ -155,9 +155,9 @@
     boatItem.classList.add("eachBoatStyle");
     let deleteButton = document.createElement('button');
     deleteButton.innerText = 'Delete!';
-    boatItem.innerHTML = `modelname:${modelname}` + "<br />" + `motor:${motor}` +
-     "<br />" + `price:${price}` + "<br />" + `productionyear:${production}`+  "<br />" +
-     `sailboat:${sailboat}` + "<br />";
+    boatItem.innerHTML = `modelname : ${modelname}` + "<br />" + `motor :${motor}` +
+     "<br />" + `price :${price}` + "<br />" + `productionyear :${production}`+  "<br />" +
+     `sailboat :${sailboat}` + "<br />";
 
      boatList.appendChild(boatItem);
      boatItem.appendChild(deleteButton);
