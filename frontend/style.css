@@ -1,5 +1,17 @@
 h1 {
   color: blue;
+
+}
+
+header {
+  display: grid;
+  grid-template-columns: 80% 20%;
+}
+
+.selected-boats {
+  background-color: darkblue;
+  color: lightblue;
+  font-size: 1em;
 }
 .header-form {
   display: flex;
@@ -57,4 +69,44 @@ h1 {
   padding: 0.5em;
   margin: 0.2em;
   border-radius: 0.2em;
+}
+
+.button-box {
+  display: flex;
+  justify-content: space-between;
+}
+
+.dropdown-selected {
+  position: relative;
+  display: inline-block;
+}
+
+.selected-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+ .choosed {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.choosed:hover {background-color: #ddd;}
+
+.dropdown-selected:hover .selected-content {display: block;} 
+
+.select {
+  background-color: gray;
+  color: whitesmoke;
+}
+
+.unselected {
+  background-color: #efefef;
+  color: black;
 }

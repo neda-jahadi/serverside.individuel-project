@@ -1,7 +1,7 @@
 
  window.addEventListener('load', async ()=>{
     let boatList = document.querySelector('#boatList');
-
+    let count= 0;
     let sortNameAscending = document.querySelector('#sortNameAscending');
     let sortNameDescending = document.querySelector('#sortNameDescending');
     let sortYearAscending = document.querySelector('#sortOldToYoung');
@@ -13,9 +13,11 @@
     let motorDiv = document.getElementById('#motorDiv');
     let sailboatDiv = document.getElementById('#sailboatDiv');
     let sortPrice = document.querySelector('#sortPrice');
-
+    let selectedBoatButton = document.querySelector('.selected-boats');
+    let SelectedBoatsText = selectedBoatButton.innerText;
+    selectedBoatButton.innerText +=  count;
     let sortOrder = 'lowprice';
-    
+    let selectedContent = document.querySelector('.selected-content');
 
     let searchModel = document.querySelector('#searchModel');
     let searchMaxPrice = document.querySelector('#searchMaxPrice');
@@ -72,18 +74,22 @@
 
       sortNameDescending.addEventListener('click', () => {
           sortOrder = 'name_desc';
+          
       })
 
       sortYearAscending.addEventListener('click', () => {
           sortOrder = 'oldest';
+  
       })
       
       sortYearDescending.addEventListener('click', () => {
-          sortOrder = 'newest'
+          sortOrder = 'newest';
+          
       })
 
       sortPrice.addEventListener('click', () => {
-         sortOrder ='lowprice'
+         sortOrder ='lowprice';
+         
       })
 
      searchButton.addEventListener('click', async () => {
@@ -149,18 +155,33 @@
        
   })
 
+  function addNumber() {
+    count++;
+    selectedBoatButton.innerText = SelectedBoatsText;  
+    selectedBoatButton.innerText += count;
+  }
+
+  
+
 
   function createboats(modelname,motor,price,production,sailboat,id) {
     let boatItem = document.createElement('div');
     boatItem.classList.add("eachBoatStyle");
     let deleteButton = document.createElement('button');
+    let chooseButton = document.createElement('button');
+    let buttonBox = document.createElement('div');
+    chooseButton.innerText = 'Choose!';
+    
     deleteButton.innerText = 'Delete!';
+    buttonBox.classList.add('button-box');
     boatItem.innerHTML = `modelname : ${modelname}` + "<br />" + `motor :${motor}` +
      "<br />" + `price :${price}` + "<br />" + `productionyear :${production}`+  "<br />" +
      `sailboat :${sailboat}` + "<br />";
 
      boatList.appendChild(boatItem);
-     boatItem.appendChild(deleteButton);
+     boatItem.appendChild(buttonBox);
+     buttonBox.appendChild(deleteButton);
+     buttonBox.appendChild(chooseButton);
      deleteButton.addEventListener('click', async ()=>{
         const deleteResponse = await fetch(`/api/boatdelete?id=${id}`,{method: 'DELETE'});
         const deleteResult = await deleteResponse.text();
@@ -168,6 +189,17 @@
         boatList.removeChild(boatItem);
 
      }) //deleteButton
+
+     chooseButton.addEventListener('click', async ()=> {
+        const chooseResponse = await fetch(`/api/boat?id=${id}`, {method:'GET'});
+        const chooseResult = await chooseResponse.json();
+        console.log('choose result:', chooseResult);
+        addNumber();
+        let selectedBoat = document.createElement('p');
+        selectedBoat.classList.add('choosed');
+        selectedBoat.innerText = chooseResult.modelname;
+        selectedContent.appendChild(selectedBoat);
+     }) //chooseButton
   }
 
 
